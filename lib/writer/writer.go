@@ -6,7 +6,8 @@ import (
 	"os"
 
 	"github.com/TeoDev1611/remus/errors"
-	toml "github.com/pelletier/go-toml/v2"
+	"github.com/pelletier/go-toml/v2"
+	"gopkg.in/yaml.v3"
 )
 
 func WriteJsonDB(name, spaces string, empty bool, data ...map[string]interface{}) {
@@ -46,5 +47,22 @@ func WriteTomlDB(name string, empty bool, data ...map[string]interface{}) {
 	enc.SetIndentTables(true)
 	enc.Encode(data)
 	err2 := os.WriteFile(name, buf.Bytes(), os.ModePerm)
+	errors.CheckErrors(err2)
+}
+
+func WriteYamlDB(name string, empty bool, data ...map[string]interface{}) {
+	if name == "" {
+		name = "db.yaml"
+	}
+	if empty {
+		data = []map[string]interface{}{{
+			"database":    "Remus",
+			"awesome":     true,
+			"description": "Experimental DataBase",
+		}}
+	}
+	file, err := yaml.Marshal(data)
+	errors.CheckErrors(err)
+	err2 := os.WriteFile(name, file, os.ModePerm)
 	errors.CheckErrors(err2)
 }

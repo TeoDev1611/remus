@@ -7,6 +7,7 @@ import (
 
 	"github.com/TeoDev1611/remus/errors"
 	"github.com/pelletier/go-toml/v2"
+	"gopkg.in/yaml.v3"
 )
 
 func find(obj interface{}, key string) (interface{}, bool) {
@@ -67,6 +68,24 @@ func GetAllDataFileToml(filename string) []interface{} {
 
 func GetSingleKeyToml(filename, key string) string {
 	data := GetAllDataFileToml(filename)
+	val, info := find(data, key)
+	if info {
+		return fmt.Sprintf("%v", val)
+	}
+	return "No data"
+}
+
+func GetAllDataFileYaml(filename string) []interface{} {
+	file, err := os.ReadFile(filename)
+	errors.CheckErrors(err)
+	var data []interface{}
+	err2 := yaml.Unmarshal(file, &data)
+	errors.CheckErrors(err2)
+	return data
+}
+
+func GetSingleKeyYaml(filename, key string) string {
+	data := GetAllDataFileYaml(filename)
 	val, info := find(data, key)
 	if info {
 		return fmt.Sprintf("%v", val)
