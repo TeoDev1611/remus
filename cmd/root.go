@@ -24,6 +24,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 
 	"github.com/TeoDev1611/remus/core/repl"
 	"github.com/TeoDev1611/remus/errors"
@@ -54,20 +55,22 @@ func init() {
 }
 
 func initConfig() {
+	home, err := os.UserHomeDir()
+	errors.CheckErrors(err)
+	cwd, err2 := os.Getwd()
+	errors.CheckErrors(err2)
+
 	if cfgFile != "" {
-		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		errors.CheckErrors(err)
-
 		viper.AddConfigPath(home)
 		viper.SetConfigType("toml")
-		viper.SetConfigName(".remus")
 	}
-
+	viper.SetConfigName(".remus")
+	viper.AddConfigPath(cwd)
+	viper.SetDefault("db_dir", path.Join(home, "remus", "db"))
 	viper.AutomaticEnv()
+
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Fprintln(os.Stderr, "Using config file:", viper.ConfigFileUsed())
 	}
