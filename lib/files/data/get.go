@@ -3,12 +3,16 @@ package data
 import (
 	"encoding/json"
 	"fmt"
-	"os"
 
 	"github.com/TeoDev1611/remus/errors"
 	"github.com/pelletier/go-toml/v2"
+	"github.com/spf13/afero"
 	"gopkg.in/yaml.v3"
 )
+
+// Afero Utils
+var fs = afero.NewMemMapFs()
+var afs = &afero.Afero{Fs: fs}
 
 func find(obj interface{}, key string) (interface{}, bool) {
 
@@ -40,7 +44,7 @@ func find(obj interface{}, key string) (interface{}, bool) {
 }
 
 func GetAllDataFileJson(filename string) []interface{} {
-	file, err := os.ReadFile(filename)
+	file, err := afs.ReadFile(filename)
 	errors.CheckErrors(err)
 	var data []interface{}
 	err2 := json.Unmarshal(file, &data)
@@ -58,7 +62,7 @@ func GetSingleKeyJson(filename, key string) string {
 }
 
 func GetAllDataFileToml(filename string) []interface{} {
-	file, err := os.ReadFile(filename)
+	file, err := afs.ReadFile(filename)
 	errors.CheckErrors(err)
 	var data []interface{}
 	err2 := toml.Unmarshal(file, &data)
@@ -76,7 +80,7 @@ func GetSingleKeyToml(filename, key string) string {
 }
 
 func GetAllDataFileYaml(filename string) []interface{} {
-	file, err := os.ReadFile(filename)
+	file, err := afs.ReadFile(filename)
 	errors.CheckErrors(err)
 	var data []interface{}
 	err2 := yaml.Unmarshal(file, &data)

@@ -7,8 +7,13 @@ import (
 
 	"github.com/TeoDev1611/remus/errors"
 	"github.com/pelletier/go-toml/v2"
+	"github.com/spf13/afero"
 	"gopkg.in/yaml.v3"
 )
+
+// Afero Utils
+var fs = afero.NewMemMapFs()
+var afs = &afero.Afero{Fs: fs}
 
 func WriteJsonDB(name, spaces string, empty bool, data ...map[string]interface{}) {
 	if spaces == "" {
@@ -27,7 +32,7 @@ func WriteJsonDB(name, spaces string, empty bool, data ...map[string]interface{}
 	}
 	file, err := json.MarshalIndent(data, "", spaces)
 	errors.CheckErrors(err)
-	err2 := os.WriteFile(name, file, os.ModePerm)
+	err2 := afs.WriteFile(name, file, os.ModePerm)
 	errors.CheckErrors(err2)
 }
 
@@ -46,7 +51,7 @@ func WriteTomlDB(name string, empty bool, data ...map[string]interface{}) {
 	enc := toml.NewEncoder(&buf)
 	enc.SetIndentTables(true)
 	enc.Encode(data)
-	err2 := os.WriteFile(name, buf.Bytes(), os.ModePerm)
+	err2 := afs.WriteFile(name, buf.Bytes(), os.ModePerm)
 	errors.CheckErrors(err2)
 }
 
@@ -63,6 +68,6 @@ func WriteYamlDB(name string, empty bool, data ...map[string]interface{}) {
 	}
 	file, err := yaml.Marshal(data)
 	errors.CheckErrors(err)
-	err2 := os.WriteFile(name, file, os.ModePerm)
+	err2 := afs.WriteFile(name, file, os.ModePerm)
 	errors.CheckErrors(err2)
 }
