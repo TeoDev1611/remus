@@ -22,9 +22,9 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
 	"os"
 
+	"github.com/TeoDev1611/remus/core/repl"
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,7 @@ var rootCmd = &cobra.Command{
 	Use:   "remus",
 	Short: "A experimental KV Database for many languages",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Hello remus")
+		repl.StartRepl()
 	},
 }
 

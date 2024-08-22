@@ -3,6 +3,7 @@ module github.com/TeoDev1611/remus
 go 1.22.5
 
 require (
+	github.com/enescakir/emoji v1.0.0
 	github.com/pelletier/go-toml/v2 v2.2.2
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.1
