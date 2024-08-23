@@ -15,6 +15,7 @@ func ParseJsonToMap(text string) map[string]interface{} {
 	errors.CheckErrors(err)
 	return data
 }
+
 func ParseTomlToMap(text []byte) map[string]interface{} {
 	var data map[string]interface{}
 	err := toml.Unmarshal(text, &data)

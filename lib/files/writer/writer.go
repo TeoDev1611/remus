@@ -11,26 +11,23 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Afero Utils
-var fs = afero.NewMemMapFs()
-var afs = &afero.Afero{Fs: fs}
+var (
+	fs          = afero.NewMemMapFs()
+	afs         = &afero.Afero{Fs: fs}
+	DefaultData = []map[string]interface{}{{
+		"database":    "Remus",
+		"awesome":     true,
+		"description": "Experimental Database",
+	}}
+)
 
-func WriteJsonDB(name, spaces string, empty bool, data ...map[string]interface{}) {
-	if spaces == "" {
-		spaces = "  "
-	}
-
+func WriteJsonDB(name string, empty bool, data ...map[string]interface{}) {
 	if name == "" {
 		name = "./db.json"
 	}
 	if empty {
-		data = []map[string]interface{}{{
-			"database":    "Remus",
-			"awesome":     true,
-			"description": "Experimental Database",
-		}}
 	}
-	file, err := json.MarshalIndent(data, "", spaces)
+	file, err := json.MarshalIndent(data, "", " ")
 	errors.CheckErrors(err)
 	err2 := afs.WriteFile(name, file, os.ModePerm)
 	errors.CheckErrors(err2)
@@ -41,11 +38,7 @@ func WriteTomlDB(name string, empty bool, data ...map[string]interface{}) {
 		name = "db.toml"
 	}
 	if empty {
-		data = []map[string]interface{}{{
-			"database":    "Remus",
-			"awesome":     true,
-			"description": "Experimental DataBase",
-		}}
+		data = DefaultData
 	}
 	buf := bytes.Buffer{}
 	enc := toml.NewEncoder(&buf)
@@ -60,11 +53,7 @@ func WriteYamlDB(name string, empty bool, data ...map[string]interface{}) {
 		name = "db.yaml"
 	}
 	if empty {
-		data = []map[string]interface{}{{
-			"database":    "Remus",
-			"awesome":     true,
-			"description": "Experimental DataBase",
-		}}
+		data = DefaultData
 	}
 	file, err := yaml.Marshal(data)
 	errors.CheckErrors(err)

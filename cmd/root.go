@@ -69,6 +69,7 @@ func initConfig() {
 	viper.SetConfigName(".remus")
 	viper.AddConfigPath(cwd)
 	viper.SetDefault("db_dir", path.Join(home, "remus", "db"))
+	viper.SetDefault("name_db", "remus_db_example")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {

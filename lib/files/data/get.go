@@ -11,11 +11,12 @@ import (
 )
 
 // Afero Utils
-var fs = afero.NewMemMapFs()
-var afs = &afero.Afero{Fs: fs}
+var (
+	fs  = afero.NewMemMapFs()
+	afs = &afero.Afero{Fs: fs}
+)
 
 func find(obj interface{}, key string) (interface{}, bool) {
-
 	mobj, ok := obj.(map[string]interface{})
 	if !ok {
 		return nil, false

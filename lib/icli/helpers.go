@@ -11,16 +11,16 @@ import (
 
 // BasicCommand implements Command interface. It usually good idea to use it as a default command.
 type BasicCommand struct {
-	//Fn is the func to be executed when that command is called
+	// Fn is the func to be executed when that command is called
 	Fn func(...string) error
-	//Name is the command name.
+	// Name is the command name.
 	Name string
-	//Description is the description of what that command does.
+	// Description is the description of what that command does.
 	Description string
-	//Usage is the description of the usage of that command.
+	// Usage is the description of the usage of that command.
 	Usage string
 
-	//TODO
+	// TODO
 	Options []Options
 }
 

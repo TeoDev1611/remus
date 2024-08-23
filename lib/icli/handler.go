@@ -7,25 +7,25 @@ import (
 	"strings"
 )
 
-type CLI struct{
+type CLI struct {
 	reader *bufio.Reader
 
 	commander commander
 
 	helper *helpCmd
 
-	errColor Color
-	descColor Color
+	errColor   Color
+	descColor  Color
 	usageColor Color
 
-	inputPointer string
+	inputPointer   string
 	welcomeMessage string
 }
 
-//NewCLI returns a CLI with an embedded helper and exit handler.
-//The default input pointer is '>>>'
-//The default error color is RED
-func NewCLI() *CLI{
+// NewCLI returns a CLI with an embedded helper and exit handler.
+// The default input pointer is '>>>'
+// The default error color is RED
+func NewCLI() *CLI {
 	handler := &CLI{}
 	handler.reader = bufio.NewReader(os.Stdin)
 	handler.SetErrorColor(RED)
@@ -35,14 +35,14 @@ func NewCLI() *CLI{
 	handler.helper = helper
 	handler.AddCmd(helper)
 
-	exitCmd := &exitCmd{BasicCommand{Name: "exit",Fn: fnExit,Description: "Finish the cli execution.",Usage: "exit"}}
+	exitCmd := &exitCmd{BasicCommand{Name: "exit", Fn: fnExit, Description: "Finish the cli execution.", Usage: "exit"}}
 	handler.AddCmd(exitCmd)
 
 	return handler
 }
 
-//NewEmptyCLI returns an empty CLI handler.
-func NewEmptyCLI() *CLI{
+// NewEmptyCLI returns an empty CLI handler.
+func NewEmptyCLI() *CLI {
 	handler := &CLI{}
 	handler.reader = bufio.NewReader(os.Stdin)
 	handler.inputPointer = ">>>"
@@ -50,7 +50,7 @@ func NewEmptyCLI() *CLI{
 	return handler
 }
 
-//Run starts the CLI.
+// Run starts the CLI.
 func (h *CLI) Run() {
 	fmt.Println(h.welcomeMessage)
 	for {
@@ -63,29 +63,29 @@ func (h *CLI) Run() {
 	}
 }
 
-//SetErrorColor sets the error color in the CLI.
+// SetErrorColor sets the error color in the CLI.
 func (h *CLI) SetErrorColor(color Color) {
 	h.errColor = color
 }
 
-//SetWelcomeMessage sets the welcome message for when the cli is started.
-func (h *CLI) SetWelcomeMessage(msg string){
+// SetWelcomeMessage sets the welcome message for when the cli is started.
+func (h *CLI) SetWelcomeMessage(msg string) {
 	h.welcomeMessage = msg
 }
 
-//AddCmd adds a command to the cli. The command should implements Command interface.
-//it also adds that command to the helper if it's set.
-func (h *CLI) AddCmd(cmd Command){
+// AddCmd adds a command to the cli. The command should implements Command interface.
+// it also adds that command to the helper if it's set.
+func (h *CLI) AddCmd(cmd Command) {
 	h.commander.add(cmd)
 	if h.helper != nil {
 		h.helper.updateCmd(cmd)
 	}
 }
 
-//AddCmds adds multiple command to the cli. The commands should implement Command interface.
-//it also adds every command to the helper if it's set.
-func (h *CLI) AddCmds(cmds ...Command){
-	for _, cmd := range cmds{
+// AddCmds adds multiple command to the cli. The commands should implement Command interface.
+// it also adds every command to the helper if it's set.
+func (h *CLI) AddCmds(cmds ...Command) {
+	for _, cmd := range cmds {
 		h.commander.add(cmd)
 		if h.helper != nil {
 			h.helper.updateCmd(cmd)
@@ -93,20 +93,18 @@ func (h *CLI) AddCmds(cmds ...Command){
 	}
 }
 
-
-//checkCommands check in the Run loop execution if the commands is valid and execute it.
-func (h *CLI) checkCommands(input string){
+// checkCommands check in the Run loop execution if the commands is valid and execute it.
+func (h *CLI) checkCommands(input string) {
 	call := strings.Fields(input)
 	cmdName := call[0]
 
-
 	cmd, err := h.commander.get(cmdName)
 	if err != nil {
-		fmt.Printf("%v %v %v\n",h.errColor, err.Error(), RESET)
-	}else{
+		fmt.Printf("%v %v %v\n", h.errColor, err.Error(), RESET)
+	} else {
 		errCmd := cmd.GetFn()(call[1:]...)
 		if errCmd != nil {
-			fmt.Printf("%v %v %v\n",h.errColor, errCmd, RESET)
+			fmt.Printf("%v %v %v\n", h.errColor, errCmd, RESET)
 		}
 	}
 }
