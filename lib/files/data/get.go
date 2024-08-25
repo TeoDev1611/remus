@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/TeoDev1611/remus/errors"
+	"github.com/TeoDev1611/remus/logger"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/spf13/afero"
 	"gopkg.in/yaml.v3"
@@ -46,10 +46,10 @@ func find(obj interface{}, key string) (interface{}, bool) {
 
 func GetAllDataFileJson(filename string) []interface{} {
 	file, err := afs.ReadFile(filename)
-	errors.CheckErrors(err)
+	logger.CheckErrors(err)
 	var data []interface{}
 	err2 := json.Unmarshal(file, &data)
-	errors.CheckErrors(err2)
+	logger.CheckErrors(err2)
 	return data
 }
 
@@ -64,10 +64,10 @@ func GetSingleKeyJson(filename, key string) string {
 
 func GetAllDataFileToml(filename string) []interface{} {
 	file, err := afs.ReadFile(filename)
-	errors.CheckErrors(err)
+	logger.CheckErrors(err)
 	var data []interface{}
 	err2 := toml.Unmarshal(file, &data)
-	errors.CheckErrors(err2)
+	logger.CheckErrors(err2)
 	return data
 }
 
@@ -82,10 +82,10 @@ func GetSingleKeyToml(filename, key string) string {
 
 func GetAllDataFileYaml(filename string) []interface{} {
 	file, err := afs.ReadFile(filename)
-	errors.CheckErrors(err)
+	logger.CheckErrors(err)
 	var data []interface{}
 	err2 := yaml.Unmarshal(file, &data)
-	errors.CheckErrors(err2)
+	logger.CheckErrors(err2)
 	return data
 }
 

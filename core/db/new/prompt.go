@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/TeoDev1611/remus/errors"
+	"github.com/TeoDev1611/remus/logger"
 	"github.com/google/uuid"
 	"github.com/manifoldco/promptui"
 )
@@ -19,21 +19,19 @@ type UIData struct {
 func GetInfo(name, password string, prompt bool) UIData {
 	if prompt && name == "" && password == "" {
 		namePrompt := promptui.Prompt{
-			Label:     "What's the name of the database",
-			IsVimMode: true,
-			Default:   "remus_example",
+			Label:   "What's the name of the database",
+			Default: "remus_example",
 		}
 		nameInfo, errName := namePrompt.Run()
-		errors.CheckErrors(errName)
+		logger.CheckErrors(errName)
 
 		passPrompt := promptui.Prompt{
-			Label:     "What's the password for the database?",
-			IsVimMode: true,
-			Default:   "",
-			Mask:      '*',
+			Label:   "What's the password for the database?",
+			Default: "",
+			Mask:    '*',
 		}
 		passwordInfo, errPass := passPrompt.Run()
-		errors.CheckErrors(errPass)
+		logger.CheckErrors(errPass)
 
 		name = nameInfo
 		password = passwordInfo

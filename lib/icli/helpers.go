@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/TeoDev1611/remus/errors"
+	"github.com/TeoDev1611/remus/logger"
 	"github.com/enescakir/emoji"
 )
 
@@ -100,7 +100,7 @@ func (helper *helpCmd) fnHelp(args ...string) error {
 				return nil
 			}
 		}
-		errors.NewError("Invalid Command", true)
+		logger.NewError("Invalid Command", true)
 	}
 
 	return nil
